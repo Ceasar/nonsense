@@ -4,7 +4,7 @@ from nonsense import StationarySource
 def get_lines():
     with open("bruces.txt") as f:
         for line in f:
-            yield line.split()
+            yield line.strip().split()
 
 
 if __name__ == "__main__":

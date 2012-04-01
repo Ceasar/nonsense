@@ -39,27 +39,25 @@ class StationarySource(object):
             q.append(item)
         return table
 
-    def _windex(self, lst):
+    def _weighted_choice(self, item_weights):
         """Choose a random item from a weighted list of items.
 
         Accepts a list item and weight pairs."""
-        lst = list(lst)
-        wtotal = sum(x[1] for x in lst)
-        n = random.uniform(0, wtotal)
-        for item, weight in lst:
-            if n < weight:
-                break
-            n = n - weight
+        item, weight = (None, 0)
+        for item2, weight2 in item_weights:
+            n = random.randint(1, weight + weight2)
+            if n <= weight2:
+                item, weight = item2, weight + weight2
         return item
 
     def generate_sequence(self):
         """Generate a stream of random items."""
         key = self._source()
         while True:
-            items = self._table[tuple(key)].items()
-            if items:
-                item = self._windex(items)
+            items = self._table[tuple(key)].iteritems()
+            item = self._weighted_choice(items)
+            if item is None:
+                break
+            else:
                 yield item
                 key.append(item)
-            else:
-                break
