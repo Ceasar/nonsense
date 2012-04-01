@@ -8,7 +8,7 @@ Example Usage
 
 Usage is pretty simple. Just instantiate the source with some data and let it produces sequences for you.
 
-    from stationary_source import StationarySource
+    from nonsense import StationarySource
 
 
     def get_lines():

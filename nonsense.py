@@ -9,7 +9,7 @@ import random
 class StationarySource(object):
     """A stationary source object.
 
-    Produces random sequences of item based on an initial collection 
+    Produces random sequences of item based on an initial collection
     of data.
     """
     def __init__(self, collections, order):
