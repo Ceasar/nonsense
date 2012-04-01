@@ -1,11 +1,19 @@
+"""A stationary source.
+
+Produces random sequences of item based on an initial collection of data.
+"""
 from collections import defaultdict, deque, Counter
 import random
 
 
-class Generator(object):
-    def __init__(self, default_factory, collections, order):
-        self._default_factory = default_factory
-        self.order = order
+class StationarySource(object):
+    """A stationary source object.
+
+    Produces random sequences of item based on an initial collection 
+    of data.
+    """
+    def __init__(self, collections, order):
+        self._order = order
 
         self._table = defaultdict(Counter)
         for collection in collections:
@@ -13,16 +21,20 @@ class Generator(object):
             for key in t:
                 self._table[key].update(t[key])
 
+    @property
+    def order(self):
+        return self._order
+
     def _source(self):
         """Construct a deque of defaults."""
-        return deque([self._default_factory()] * self.order, \
-                maxlen=self.order)
+        return deque([None] * self.order, maxlen=self.order)
 
     def _analyze_collection(self, collection):
-        """Analyze a collection's frequencies."""
+        """Analyze a collection's conditional frequencies."""
         table = defaultdict(Counter)
         q = self._source()
         for item in collection:
+            assert item is not None, "Collections cannot contain None's."
             table[tuple(q)][item] += 1
             q.append(item)
         return table
@@ -40,7 +52,7 @@ class Generator(object):
             n = n - weight
         return item
 
-    def generate(self):
+    def generate_sequence(self):
         """Generate a stream of random items."""
         key = self._source()
         while True:
