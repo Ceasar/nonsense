@@ -1,4 +1,4 @@
-from stationary_source import StationarySource
+from nonsense import StationarySource
 
 
 def get_lines():
