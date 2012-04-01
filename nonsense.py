@@ -7,11 +7,15 @@ import random
 
 __version__ = "0.1.0"
 
+
 class StationarySource(object):
     """A stationary source object.
 
     Produces random sequences of item based on an initial collection
     of data.
+
+    collections must not contain any None's. They are reserved for interal
+    signaling.
     """
     def __init__(self, collections, order):
         self._order = order
@@ -43,21 +47,25 @@ class StationarySource(object):
     def _weighted_choice(self, item_weights):
         """Choose a random item from a weighted list of items.
 
-        Accepts a list item and weight pairs."""
+        Raises a ValueError if no items are provided."""
         item, weight = (None, 0)
         for item2, weight2 in item_weights:
             n = random.randint(1, weight + weight2)
             if n <= weight2:
                 item, weight = item2, weight + weight2
-        return item
+        if item is None and weight == 0:
+            raise ValueError("No items supplied.")
+        else:
+            return item
 
     def generate_sequence(self):
         """Generate a stream of random items."""
         key = self._source()
         while True:
             items = self._table[tuple(key)].iteritems()
-            item = self._weighted_choice(items)
-            if item is None:
+            try:
+                item = self._weighted_choice(items)
+            except ValueError:
                 break
             else:
                 yield item
