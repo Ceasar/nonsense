@@ -5,6 +5,7 @@ Produces random sequences of item based on an initial collection of data.
 from collections import defaultdict, deque, Counter
 import random
 
+__version__ = "0.1.0"
 
 class StationarySource(object):
     """A stationary source object.
