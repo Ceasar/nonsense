@@ -52,7 +52,8 @@ class StationarySource(object):
         for item2, weight2 in item_weights:
             n = random.randint(1, weight + weight2)
             if n <= weight2:
-                item, weight = item2, weight + weight2
+                item = item2
+            weight = weight + weight2
         if item is None and weight == 0:
             raise ValueError("No items supplied.")
         else:
